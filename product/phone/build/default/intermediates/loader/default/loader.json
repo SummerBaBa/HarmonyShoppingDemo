@@ -1,0 +1,31 @@
+{
+  "modulePathMap": {
+    "phone": "/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/product/phone",
+    "common": "/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/common",
+    "home": "/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/features/home",
+    "newproduct": "/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/features/newproduct",
+    "shopcart": "/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/features/shopcart",
+    "personal": "/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/features/personal",
+    "commoditydetail": "/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/features/commoditydetail",
+    "orderdetail": "/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/features/orderdetail"
+  },
+  "compileMode": "esmodule",
+  "projectRootPath": "/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping",
+  "nodeModulesPath": "/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/product/phone/build/default/intermediates/loader_out/default/node_modules",
+  "byteCodeHarInfo": {},
+  "declarationEntry": [],
+  "moduleName": "phone",
+  "hspNameOhmMap": {},
+  "harNameOhmMap": {},
+  "packageManagerType": "ohpm",
+  "compileEntry": [],
+  "otherCompileFiles": [],
+  "dynamicImportLibInfo": {},
+  "routerMap": [],
+  "hspResourcesMap": {},
+  "anBuildOutPut": "/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/product/phone/build/default/intermediates/loader_out/default/an/arm64-v8a",
+  "anBuildMode": "type",
+  "patchConfig": {
+    "changedFileList": "/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/product/phone/build/default/intermediates/patch/default/changedFileList.json"
+  }
+}

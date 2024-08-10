@@ -1,0 +1,252 @@
+{
+  "product/phone/src/main/ets/entryability/EntryAbility.ets": [
+    "If"
+  ],
+  "product/phone/src/main/ets/pages/SplashPage.ets": [
+    "Flex",
+    "Column",
+    "Image",
+    "Text"
+  ],
+  "common/src/main/ets/utils/BreakpointType.ets": [
+    "If"
+  ],
+  "common/src/main/ets/components/CommodityList.ets": [
+    "Column",
+    "Image",
+    "Text",
+    "List",
+    "LazyForEach",
+    "ListItem",
+    "If"
+  ],
+  "common/src/main/ets/components/EmptyComponent.ets": [
+    "Flex",
+    "Column",
+    "Image",
+    "Text"
+  ],
+  "common/src/main/ets/utils/CommonDataSource.ets": [
+    "If"
+  ],
+  "common/src/main/ets/utils/LocalDataManager.ets": [
+    "If"
+  ],
+  "common/src/main/ets/utils/Utils.ets": [
+    "If"
+  ],
+  "common/src/main/ets/components/CounterProduct.ets": [
+    "Row",
+    "Image",
+    "Text",
+    "If"
+  ],
+  "product/phone/src/main/ets/pages/MainPage.ets": [
+    "Column",
+    "Tabs",
+    "TabContent",
+    "Image",
+    "Text",
+    "If"
+  ],
+  "features/home/src/main/ets/components/Home.ets": [
+    "Column",
+    "Flex",
+    "Image",
+    "Row",
+    "Swiper",
+    "ForEach",
+    "Text",
+    "Stack",
+    "Scroll",
+    "If"
+  ],
+  "features/newproduct/src/main/ets/components/NewProduct.ets": [
+    "Swiper",
+    "ForEach",
+    "Image",
+    "Flex",
+    "Text",
+    "Row",
+    "List",
+    "LazyForEach",
+    "ListItem",
+    "Column",
+    "Scroll",
+    "If"
+  ],
+  "features/shopcart/src/main/ets/components/ShopCart.ets": [
+    "Flex",
+    "Column",
+    "Image",
+    "Text",
+    "Row",
+    "Checkbox",
+    "Span",
+    "Button",
+    "Scroll",
+    "List",
+    "ForEach",
+    "ListItem",
+    "If"
+  ],
+  "features/personal/src/main/ets/components/Personal.ets": [
+    "Column",
+    "Row",
+    "Image",
+    "Text",
+    "Divider",
+    "Flex",
+    "ForEach",
+    "Blank",
+    "Stack",
+    "Scroll",
+    "If"
+  ],
+  "features/personal/src/main/ets/components/IconButton.ets": [
+    "Column",
+    "Badge",
+    "Image",
+    "Text",
+    "If"
+  ],
+  "features/personal/src/main/ets/components/LiveList.ets": [
+    "List",
+    "LazyForEach",
+    "ListItem",
+    "Column",
+    "Stack",
+    "Image",
+    "Text",
+    "Row",
+    "If"
+  ],
+  "product/phone/src/main/ets/pages/CommodityDetailPage.ets": [
+    "Row"
+  ],
+  "features/commoditydetail/src/main/ets/components/CommodityDetail.ets": [
+    "Button",
+    "CustomDialogController",
+    "Stack",
+    "Swiper",
+    "ForEach",
+    "Flex",
+    "Image",
+    "Text",
+    "Column",
+    "Span",
+    "Row",
+    "Divider",
+    "Blank",
+    "LazyForEach",
+    "Rating",
+    "Scroll",
+    "GridRow",
+    "GridCol",
+    "If"
+  ],
+  "features/commoditydetail/src/main/ets/components/SpecificationDialog.ets": [
+    "CustomDialogController",
+    "GridRow",
+    "GridCol",
+    "Column",
+    "Image",
+    "Row",
+    "Text",
+    "Span",
+    "Scroll",
+    "ForEach",
+    "Flex",
+    "If"
+  ],
+  "features/commoditydetail/src/main/ets/components/CapsuleGroupButton.ets": [
+    "Flex",
+    "ForEach",
+    "Text"
+  ],
+  "product/phone/src/main/ets/pages/ConfirmOrderPage.ets": [
+    "Column"
+  ],
+  "features/orderdetail/src/main/ets/components/ConfirmOrder.ets": [
+    "Flex",
+    "Column",
+    "Scroll",
+    "GridRow",
+    "GridCol",
+    "Text",
+    "Button",
+    "If"
+  ],
+  "features/orderdetail/src/main/ets/components/AddressInfo.ets": [
+    "Flex",
+    "Image",
+    "Column",
+    "Row",
+    "Text"
+  ],
+  "features/orderdetail/src/main/ets/components/HeaderBar.ets": [
+    "Flex",
+    "Button",
+    "Image",
+    "Text",
+    "If"
+  ],
+  "features/orderdetail/src/main/ets/components/CommodityOrderList.ets": [
+    "Column",
+    "ForEach",
+    "Flex",
+    "Text",
+    "Divider",
+    "Row",
+    "Image"
+  ],
+  "features/orderdetail/src/main/ets/components/CommodityOrderItem.ets": [
+    "Flex",
+    "Image",
+    "Column",
+    "Text",
+    "If"
+  ],
+  "features/orderdetail/src/main/ets/components/PayOrder.ets": [
+    "Row",
+    "Column",
+    "Text",
+    "Blank",
+    "Image",
+    "Flex",
+    "Button",
+    "Stack",
+    "Scroll",
+    "GridRow",
+    "GridCol",
+    "If"
+  ],
+  "features/orderdetail/src/main/ets/components/OrderDetailList.ets": [
+    "Column",
+    "Tabs",
+    "TabContent",
+    "Flex",
+    "Text"
+  ],
+  "features/orderdetail/src/main/ets/components/OrderListContent.ets": [
+    "Column",
+    "Scroll",
+    "GridRow",
+    "GridCol",
+    "List",
+    "ForEach",
+    "ListItem",
+    "Flex",
+    "Text",
+    "Divider",
+    "Button",
+    "If"
+  ],
+  "product/phone/src/main/ets/pages/PayOrderPage.ets": [
+    "Column",
+    "If"
+  ],
+  "product/phone/src/main/ets/pages/OrderDetailListPage.ets": [
+    "Column"
+  ]
+}

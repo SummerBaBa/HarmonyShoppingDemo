@@ -1,0 +1,505 @@
+Ôr@Ÿªassertions¤code´customTransformCache¬dependencies¢id¤meta±moduleSideEffects¬originalCode±originalSourcemap«resolvedIds®sourcemapChainµsyntheticNamedExportsµtransformDependencies®transformFiles¨cacheAstÔrAÚ:4if (!("finalizeConstruction" in ViewPU.prototype)) {
+    Reflect.set(ViewPU.prototype, "finalizeConstruction", () => { });
+}
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License,Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+import router from '@ohos.router';
+import { LocalDataManager, Logger, OrderOperationStatus, StyleConstants, BreakpointConstants } from '@ohos/common';
+import { Home } from '@ohos/home';
+import { NewProduct } from '@ohos/newproduct';
+import { ShopCart } from '@ohos/shopcart';
+import { Personal } from '@ohos/personal';
+import { buttonInfo } from '../viewmodel/MainPageData';
+import { PageConstants } from '../constants/PageConstants';
+class MainPage extends ViewPU {
+    constructor(parent, params, __localStorage, elmtId = -1, paramsLambda = undefined, extraInfo) {
+        super(parent, __localStorage, elmtId, extraInfo);
+        if (typeof paramsLambda === "function") {
+            this.paramsGenerator_ = paramsLambda;
+        }
+        this.__currentBreakpoint = this.createStorageProp('currentBreakpoint', BreakpointConstants.BREAKPOINT_SM, "currentBreakpoint");
+        this.__currentPageIndex = this.createStorageLink('IndexPage', 0, "currentPageIndex");
+        this.__shoppingCartCache = new ObservedPropertyObjectPU([], this, "shoppingCartCache");
+        this.__shoppingCartList = new ObservedPropertyObjectPU([], this, "shoppingCartList");
+        this.__orderCount = new ObservedPropertyObjectPU({
+            payment: 0,
+            ship: 0,
+            receipt: 0,
+            evaluation: 0,
+            sale: 0
+        }, this, "orderCount");
+        this.localDataManager = LocalDataManager.instance();
+        this.setInitiallyProvidedValue(params);
+        this.finalizeConstruction();
+    }
+    setInitiallyProvidedValue(params) {
+        if (params.shoppingCartCache !== undefined) {
+            this.shoppingCartCache = params.shoppingCartCache;
+        }
+        if (params.shoppingCartList !== undefined) {
+            this.shoppingCartList = params.shoppingCartList;
+        }
+        if (params.orderCount !== undefined) {
+            this.orderCount = params.orderCount;
+        }
+        if (params.localDataManager !== undefined) {
+            this.localDataManager = params.localDataManager;
+        }
+    }
+    updateStateVars(params) {
+    }
+    purgeVariableDependenciesOnElmtId(rmElmtId) {
+        this.__currentBreakpoint.purgeDependencyOnElmtId(rmElmtId);
+        this.__currentPageIndex.purgeDependencyOnElmtId(rmElmtId);
+        this.__shoppingCartCache.purgeDependencyOnElmtId(rmElmtId);
+        this.__shoppingCartList.purgeDependencyOnElmtId(rmElmtId);
+        this.__orderCount.purgeDependencyOnElmtId(rmElmtId);
+    }
+    aboutToBeDeleted() {
+        this.__currentBreakpoint.aboutToBeDeleted();
+        this.__currentPageIndex.aboutToBeDeleted();
+        this.__shoppingCartCache.aboutToBeDeleted();
+        this.__shoppingCartList.aboutToBeDeleted();
+        this.__orderCount.aboutToBeDeleted();
+        SubscriberManager.Get().delete(this.id__());
+        this.aboutToBeDeletedInternal();
+    }
+    get currentBreakpoint() {
+        return this.__currentBreakpoint.get();
+    }
+    set currentBreakpoint(newValue) {
+        this.__currentBreakpoint.set(newValue);
+    }
+    get currentPageIndex() {
+        return this.__currentPageIndex.get();
+    }
+    set currentPageIndex(newValue) {
+        this.__currentPageIndex.set(newValue);
+    }
+    get shoppingCartCache() {
+        return this.__shoppingCartCache.get();
+    }
+    set shoppingCartCache(newValue) {
+        this.__shoppingCartCache.set(newValue);
+    }
+    get shoppingCartList() {
+        return this.__shoppingCartList.get();
+    }
+    set shoppingCartList(newValue) {
+        this.__shoppingCartList.set(newValue);
+    }
+    get orderCount() {
+        return this.__orderCount.get();
+    }
+    set orderCount(newValue) {
+        this.__orderCount.set(newValue);
+    }
+    aboutToAppear() {
+        this.shoppingCartList = this.shoppingCartCache?.length > 0 ? this.shoppingCartCache : [];
+        this.queryOrderList();
+    }
+    aboutToDisappear() {
+    }
+    queryShopCart() {
+        const shoppingData = this.localDataManager.queryShopCart();
+        this.shoppingCartList = shoppingData;
+        this.shoppingCartCache = shoppingData;
+    }
+    routerDetailPage(data) {
+        router.pushUrl({
+            url: PageConstants.COMMODITY_DETAIL_PAGE_URL,
+            params: { id: data.id }
+        }).catch((err) => {
+            Logger.error(JSON.stringify(err));
+        });
+    }
+    queryOrderList() {
+        const orderList = this.localDataManager.queryOrderList();
+        this.orderCount = {
+            payment: orderList.filter(item => item.status === OrderOperationStatus.UN_PAY).length,
+            ship: 0,
+            receipt: orderList.filter(item => item.status === OrderOperationStatus.DELIVERED).length,
+            evaluation: orderList.filter(item => item.status === OrderOperationStatus.RECEIPT).length,
+            sale: 0
+        };
+    }
+    onPageShow() {
+        this.queryShopCart();
+        this.queryOrderList();
+    }
+    initialRender() {
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Column.create();
+            Column.backgroundColor({ "id": 134217900, "type": 10001, params: [], "bundleName": "com.example.multishopping", "moduleName": "phone" });
+        }, Column);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Tabs.create({
+                barPosition: this.currentBreakpoint === BreakpointConstants.BREAKPOINT_LG ? BarPosition.Start : BarPosition.End,
+                index: this.currentPageIndex
+            });
+            Tabs.barWidth(this.currentBreakpoint === BreakpointConstants.BREAKPOINT_LG ? { "id": 134217739, "type": 10002, params: [], "bundleName": "com.example.multishopping", "moduleName": "phone" } : StyleConstants.FULL_WIDTH);
+            Tabs.barHeight(this.currentBreakpoint === BreakpointConstants.BREAKPOINT_LG ?
+                StyleConstants.SIXTY_HEIGHT : { "id": 134217924, "type": 10002, params: [], "bundleName": "com.example.multishopping", "moduleName": "phone" });
+            Tabs.vertical(this.currentBreakpoint === BreakpointConstants.BREAKPOINT_LG);
+            Tabs.scrollable(false);
+            Tabs.onChange((index) => {
+                this.currentPageIndex = index;
+                if (index === PageConstants.PERSONAL_INDEX) {
+                    this.queryShopCart();
+                }
+                else if (index === PageConstants.PERSONAL_INDEX) {
+                    this.queryOrderList();
+                }
+            });
+        }, Tabs);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            TabContent.create(() => {
+                {
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        if (isInitialRender) {
+                            let componentCall = new Home(this, {
+                                onClickItem: (data) => this.routerDetailPage(data)
+                            }, undefined, elmtId, () => { }, { page: "product/phone/src/main/ets/pages/MainPage.ets", line: 96, col: 11 });
+                            ViewPU.create(componentCall);
+                            let paramsLambda = () => {
+                                return {
+                                    onClickItem: (data) => this.routerDetailPage(data)
+                                };
+                            };
+                            componentCall.paramsGenerator_ = paramsLambda;
+                        }
+                        else {
+                            this.updateStateVarsOfChildByElmtId(elmtId, {});
+                        }
+                    }, { name: "Home" });
+                }
+            });
+            TabContent.tabBar({ builder: () => {
+                    this.BottomNavigation.call(this, buttonInfo[PageConstants.HOME_INDEX]);
+                } });
+        }, TabContent);
+        TabContent.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            TabContent.create(() => {
+                {
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        if (isInitialRender) {
+                            let componentCall = new NewProduct(this, {}, undefined, elmtId, () => { }, { page: "product/phone/src/main/ets/pages/MainPage.ets", line: 103, col: 11 });
+                            ViewPU.create(componentCall);
+                            let paramsLambda = () => {
+                                return {};
+                            };
+                            componentCall.paramsGenerator_ = paramsLambda;
+                        }
+                        else {
+                            this.updateStateVarsOfChildByElmtId(elmtId, {});
+                        }
+                    }, { name: "NewProduct" });
+                }
+            });
+            TabContent.tabBar({ builder: () => {
+                    this.BottomNavigation.call(this, buttonInfo[PageConstants.NEW_PRODUCT_INDEX]);
+                } });
+        }, TabContent);
+        TabContent.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            TabContent.create(() => {
+                {
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        if (isInitialRender) {
+                            let componentCall = new ShopCart(this, {
+                                products: this.__shoppingCartList,
+                                onNeedUpdate: () => this.queryShopCart()
+                            }, undefined, elmtId, () => { }, { page: "product/phone/src/main/ets/pages/MainPage.ets", line: 108, col: 11 });
+                            ViewPU.create(componentCall);
+                            let paramsLambda = () => {
+                                return {
+                                    products: this.shoppingCartList,
+                                    onNeedUpdate: () => this.queryShopCart()
+                                };
+                            };
+                            componentCall.paramsGenerator_ = paramsLambda;
+                        }
+                        else {
+                            this.updateStateVarsOfChildByElmtId(elmtId, {});
+                        }
+                    }, { name: "ShopCart" });
+                }
+            });
+            TabContent.tabBar({ builder: () => {
+                    this.BottomNavigation.call(this, buttonInfo[PageConstants.SHOP_CART_INDEX]);
+                } });
+        }, TabContent);
+        TabContent.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            TabContent.create(() => {
+                {
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        if (isInitialRender) {
+                            let componentCall = new Personal(this, { orderCount: this.__orderCount }, undefined, elmtId, () => { }, { page: "product/phone/src/main/ets/pages/MainPage.ets", line: 116, col: 11 });
+                            ViewPU.create(componentCall);
+                            let paramsLambda = () => {
+                                return {
+                                    orderCount: this.orderCount
+                                };
+                            };
+                            componentCall.paramsGenerator_ = paramsLambda;
+                        }
+                        else {
+                            this.updateStateVarsOfChildByElmtId(elmtId, {});
+                        }
+                    }, { name: "Personal" });
+                }
+            });
+            TabContent.tabBar({ builder: () => {
+                    this.BottomNavigation.call(this, buttonInfo[PageConstants.PERSONAL_INDEX]);
+                } });
+        }, TabContent);
+        TabContent.pop();
+        Tabs.pop();
+        Column.pop();
+    }
+    BottomNavigation(button, parent = null) {
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Column.create({ space: PageConstants.BUTTON_SPACE });
+            Column.width(StyleConstants.FULL_WIDTH);
+            Column.height(StyleConstants.FULL_HEIGHT);
+            Column.alignItems(HorizontalAlign.Center);
+            Column.justifyContent(FlexAlign.Center);
+        }, Column);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Image.create(this.currentPageIndex === button.index ? button.selectImg : button.img);
+            Image.objectFit(ImageFit.Contain);
+            Image.width({ "id": 134217740, "type": 10002, params: [], "bundleName": "com.example.multishopping", "moduleName": "phone" });
+            Image.height({ "id": 134217740, "type": 10002, params: [], "bundleName": "com.example.multishopping", "moduleName": "phone" });
+        }, Image);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Text.create(button.title);
+            Text.fontColor(this.currentPageIndex === button.index ? { "id": 134217898, "type": 10001, params: [], "bundleName": "com.example.multishopping", "moduleName": "phone" } : Color.Black);
+            Text.opacity(this.currentPageIndex === button.index ? StyleConstants.FULL_OPACITY : StyleConstants.SIXTY_OPACITY);
+            Text.fontWeight(StyleConstants.FONT_WEIGHT_FIVE);
+            Text.textAlign(TextAlign.Center);
+            Text.fontSize({ "id": 134217918, "type": 10002, params: [], "bundleName": "com.example.multishopping", "moduleName": "phone" });
+        }, Text);
+        Text.pop();
+        Column.pop();
+    }
+    rerender() {
+        this.updateDirtyElements();
+    }
+    static getEntryName() {
+        return "MainPage";
+    }
+}
+registerNamedRoute(() => new MainPage(undefined, {}), "", { bundleName: "com.example.multishopping", moduleName: "phone", pagePath: "pages/MainPage", pageFullPath: "product/phone/src/main/ets/pages/MainPage", integratedHsp: "false" });
+//# sourceMappingURL=MainPage.js.mapÂ˜Ùt hvigor_ignore__Applications_DevEco-Studio.app_Contents_sdk_HarmonyOS-NEXT-DB3_openharmony_ets_api_@ohos.router.d.tsÙA/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/common/index.etsÙH/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/features/home/index.etsÙN/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/features/newproduct/index.etsÙL/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/features/shopcart/index.etsÙL/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/features/personal/index.etsÙf/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/product/phone/src/main/ets/viewmodel/MainPageData.etsÙg/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/product/phone/src/main/ets/constants/PageConstants.etsÙ^/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/product/phone/src/main/ets/pages/MainPage.etsÔrBš°belongModulePathªmoduleName±isLocalDependency¯isNodeEntryFile§pkgPath±belongProjectPath§pkgNameªpkgVersion±dependencyPkgInfo¯hostModulesInfoÙ>/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/product/phone¥phoneÃÂÙ>/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/product/phoneÙ0/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping¥phone¥1.0.0Ô  ÃÚÜ/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License,Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import router from '@ohos.router';
+import {
+  LocalDataManager,
+  Logger,
+  Product,
+  Commodity,
+  OrderOperationStatus,
+  StyleConstants,
+  BreakpointConstants
+} from '@ohos/common';
+import { Home } from '@ohos/home';
+import { NewProduct } from '@ohos/newproduct';
+import { ShopCart } from '@ohos/shopcart';
+import { Personal } from '@ohos/personal';
+import { buttonInfo, ButtonInfoModel } from '../viewmodel/MainPageData';
+import { PageConstants } from '../constants/PageConstants';
+import { OrderCount } from '@ohos/commoditydetail/src/main/ets/viewmodel/TypeModel';
+
+@Entry
+@Component
+struct MainPage {
+  @StorageProp('currentBreakpoint') currentBreakpoint: string = BreakpointConstants.BREAKPOINT_SM;
+  @StorageLink('IndexPage') currentPageIndex: number = 0;
+  @State shoppingCartCache: Product[] = [];
+  @State shoppingCartList: Product[] = [];
+  @State orderCount: OrderCount = {
+    payment: 0,
+    ship: 0,
+    receipt: 0,
+    evaluation: 0,
+    sale: 0
+  };
+  private localDataManager: LocalDataManager = LocalDataManager.instance();
+
+  aboutToAppear() {
+    this.shoppingCartList = this.shoppingCartCache?.length > 0 ? this.shoppingCartCache : [];
+    this.queryOrderList();
+  }
+
+  aboutToDisappear() {
+  }
+
+  queryShopCart() {
+    const shoppingData = this.localDataManager.queryShopCart();
+    this.shoppingCartList = shoppingData;
+    this.shoppingCartCache = shoppingData;
+  }
+
+  routerDetailPage(data: Commodity) {
+    router.pushUrl({
+      url: PageConstants.COMMODITY_DETAIL_PAGE_URL,
+      params: { id: data.id }
+    }).catch((err: Error) => {
+      Logger.error(JSON.stringify(err));
+    });
+  }
+
+  queryOrderList() {
+    const orderList = this.localDataManager.queryOrderList();
+    this.orderCount = {
+      payment: orderList.filter(item => item.status === OrderOperationStatus.UN_PAY).length,
+      ship: 0,
+      receipt: orderList.filter(item => item.status === OrderOperationStatus.DELIVERED).length,
+      evaluation: orderList.filter(item => item.status === OrderOperationStatus.RECEIPT).length,
+      sale: 0
+    };
+  }
+
+  onPageShow() {
+    this.queryShopCart();
+    this.queryOrderList();
+  }
+
+  build() {
+    Column() {
+      Tabs({
+        barPosition: this.currentBreakpoint === BreakpointConstants.BREAKPOINT_LG ? BarPosition.Start : BarPosition.End,
+        index: this.currentPageIndex
+      }) {
+        TabContent() {
+          Home({
+            onClickItem: (data: Commodity): void => this.routerDetailPage(data)
+          })
+        }
+        .tabBar(this.BottomNavigation(buttonInfo[PageConstants.HOME_INDEX]))
+
+        TabContent() {
+          NewProduct()
+        }
+        .tabBar(this.BottomNavigation(buttonInfo[PageConstants.NEW_PRODUCT_INDEX]))
+
+        TabContent() {
+          ShopCart({
+            products: this.shoppingCartList,
+            onNeedUpdate: (): void => this.queryShopCart()
+          })
+        }
+        .tabBar(this.BottomNavigation(buttonInfo[PageConstants.SHOP_CART_INDEX]))
+
+        TabContent() {
+          Personal({ orderCount: $orderCount })
+        }
+        .tabBar(this.BottomNavigation(buttonInfo[PageConstants.PERSONAL_INDEX]))
+      }
+      .barWidth(this.currentBreakpoint === BreakpointConstants.BREAKPOINT_LG ?
+        $r('app.float.bar_width') : StyleConstants.FULL_WIDTH)
+      .barHeight(this.currentBreakpoint === BreakpointConstants.BREAKPOINT_LG ?
+        StyleConstants.SIXTY_HEIGHT : $r('app.float.vp_fifty_six'))
+      .vertical(this.currentBreakpoint === BreakpointConstants.BREAKPOINT_LG)
+      .scrollable(false)
+      .onChange((index: number) => {
+        this.currentPageIndex = index;
+        if (index === PageConstants.PERSONAL_INDEX) {
+          this.queryShopCart();
+        } else if (index === PageConstants.PERSONAL_INDEX) {
+          this.queryOrderList();
+        }
+      })
+    }
+    .backgroundColor($r('app.color.page_background'))
+  }
+
+  @Builder BottomNavigation(button: ButtonInfoModel) {
+    Column({ space: PageConstants.BUTTON_SPACE }) {
+      Image(this.currentPageIndex === button.index ? button.selectImg : button.img)
+        .objectFit(ImageFit.Contain)
+        .width($r('app.float.main_image_size'))
+        .height($r('app.float.main_image_size'))
+      Text(button.title)
+        .fontColor(this.currentPageIndex === button.index ? $r('app.color.focus_color') : Color.Black)
+        .opacity(this.currentPageIndex === button.index ? StyleConstants.FULL_OPACITY : StyleConstants.SIXTY_OPACITY)
+        .fontWeight(StyleConstants.FONT_WEIGHT_FIVE)
+        .textAlign(TextAlign.Center)
+        .fontSize($r('app.float.micro_font_size'))
+    }
+    .width(StyleConstants.FULL_WIDTH)
+    .height(StyleConstants.FULL_HEIGHT)
+    .alignItems(HorizontalAlign.Center)
+    .justifyContent(FlexAlign.Center)
+  }
+}ÀÔrC˜¬@ohos.routerº../constants/PageConstants¹../viewmodel/MainPageDataª@ohos/home¬@ohos/common®@ohos/shopcart®@ohos/personal°@ohos/newproductÔrD—ªassertions¨external¢id¤meta±moduleSideEffectsªresolvedByµsyntheticNamedExportsAÃÙt hvigor_ignore__Applications_DevEco-Studio.app_Contents_sdk_HarmonyOS-NEXT-DB3_openharmony_ets_api_@ohos.router.d.tsAÃªoh-resolveÂDAÂÙg/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/product/phone/src/main/ets/constants/PageConstants.etsAÃªoh-resolveÂDAÂÙf/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/product/phone/src/main/ets/viewmodel/MainPageData.etsAÃªoh-resolveÂDAÂÙH/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/features/home/index.etsAÃªoh-resolveÂDAÂÙA/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/common/index.etsAÃªoh-resolveÂDAÂÙL/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/features/shopcart/index.etsAÃªoh-resolveÂDAÂÙL/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/features/personal/index.etsAÃªoh-resolveÂDAÂÙN/Users/sun/codelabs/HarmonyOS_NEXT/MultiShopping/features/newproduct/index.etsAÃªoh-resolveÂ’ÔrE–§version¤fileªsourceRoot§sources¥names¨mappings«MainPage.js ‘¬MainPage.etsÜ*‘”    ‘” –”   ” ” ” ”! !”" "Ü ”   ” ”	 ” ” ”! ”# ”7 ”9 ”ÌG ”ÌI ”Ì\ ”Ì^ ”Ìd ”Ìr ”Ìs ˜”   ” ”	 	” ” ” ”! !”" "˜”   ” ”	 	” ” ” ”- -”. .˜”   ” ”	 	” ” ” ”) )”* *˜”   ” ”	 	” ” ” ”) )”* *˜”   ” ”	 	” ” &” ,”6 ÌG”7 ÌH˜”   ” ”	 	” ” ” ”: :”; ;’” #” #‘” ! –”: $”ÌM $"”ÌO $Ì@”Ìb $ÌS”Ìc $ÌT”Ìp $Ìa””9 %”ÌD %”ÌF %7”ÌG %8’”Ì@ &(”ÌB &*’”? ''”ÌA ')‘”9 ("”” )” )” )” )”” *” *” *
+” *”” +” +” +” +”” ,” ,” ,” ,”” -” -” -
+” -‘”	 .•”  //”0 /?”1 /Ì@”9 /ÌH”; /ÌJ‘” ÌT’” $$” $5’” $$” $5’” %” %,’” %” %,’” &	” &’” &	” &’” '	” '’” '	” '’” (	” (’” (	” (’” 1” 1Ü ” 2” 2” 2	” 2”  2”$ 2 ”% 2!”6 22”8 24”> 2:”ÌA 2=”ÌB 2>”ÌC 2?”ÌD 2Ì@”ÌE 2ÌA”ÌI 2ÌE”ÌJ 2ÌF”Ì[ 2ÌW”Ì\ 2ÌX”Ì] 2ÌY”Ì^ 2ÌZ”Ì` 2Ì\”Ìa 2Ì]–” 3” 3” 3	” 3” 3” 3’” 4” 4’” 6” 6’” 7” 7’” 9” 9›” :” :
+” :” :”! :”" :”2 :.”3 :/”Ì@ :<”ÌB :>”ÌC :?—” ;” ;” ;	” ;”  ;”, ;(”- ;)—” <” <” <	” <”! <”- <)”. <*’” =” =”” ?” ?” ?” ?"•” Ì@” Ì@
+” Ì@” Ì@” Ì@–” ÌA” ÌA	” ÌA” ÌA” ÌA”8 ÌA2š” ÌB” ÌB” ÌB” ÌB” ÌB” ÌB” ÌB” ÌB”! ÌB”# ÌB™”	 ÌC”
+ ÌC” ÌC” ÌC” ÌC” ÌC” ÌC” ÌC” ÌC” ÌD” ÌD” ÌD” ÌD” ÌD” ÌD” ÌD”' ÌD!”( ÌD"”+ ÌD%”, ÌD&”- ÌD'”. ÌD(”” ÌE”	 ÌE”
+ ÌE” ÌE’” ÌF” ÌF’” ÌH” ÌH›” ÌI” ÌI
+” ÌI” ÌI” ÌI” ÌI”/ ÌI+”0 ÌI,”> ÌI:”Ì@ ÌI<”ÌA ÌI=•” ÌJ” ÌJ” ÌJ	” ÌJ” ÌJÜ ” ÌK” ÌK” ÌK” ÌK” ÌK”% ÌK”& ÌK ”* ÌK$”+ ÌK%”- ÌK'”. ÌK(”2 ÌK,”3 ÌK-”9 ÌK3”> ÌK8”ÌR ÌKÌL”ÌS ÌKÌM”ÌY ÌKÌS”ÌZ ÌKÌT”Ì[ ÌKÌU”Ìa ÌKÌ[”” ÌL” ÌL
+” ÌL” ÌLÜ ” ÌM” ÌM” ÌM” ÌM” ÌM”% ÌM”& ÌM ”* ÌM$”+ ÌM%”- ÌM'”. ÌM(”2 ÌM,”3 ÌM-”9 ÌM3”> ÌM8”ÌR ÌMÌL”ÌS ÌMÌM”Ì\ ÌMÌV”Ì] ÌMÌW”Ì^ ÌMÌX”Ìd ÌMÌ^Ü ” ÌN” ÌN” ÌN”! ÌN”" ÌN”( ÌN"”) ÌN#”- ÌN'”. ÌN(”0 ÌN*”1 ÌN+”5 ÌN/”6 ÌN0”< ÌN6”ÌA ÌN;”ÌU ÌNÌO”ÌV ÌNÌP”Ì] ÌNÌW”Ì^ ÌNÌX”Ì_ ÌNÌY”Ìe ÌNÌ_”” ÌO” ÌO
+” ÌO” ÌO’”	 ÌP”
+ ÌP’” ÌQ” ÌQ’” ÌS” ÌS–” ÌT” ÌT” ÌT	” ÌT” ÌT” ÌT–” ÌU” ÌU” ÌU	” ÌU” ÌU” ÌU’” ÌV” ÌV‘” ÌX’” ÌY” ÌY
+”” ÌY” ÌY
+” Ì†”" Ì†“” ÌZ” ÌZ
+” ÌZÜ ” Ì[” Ì[” Ì[”! Ì[”" Ì[”3 Ì[+”8 Ì[0”ÌK Ì[ÌC”ÌL Ì[ÌD”ÌY Ì[ÌQ”ÌZ Ì[ÌR”Ì[ Ì[ÌS”Ì\ Ì[ÌT”Ìg Ì[Ì_”Ìh Ì[Ì`”Ìm Ì[Ìe”Ìn Ì[Ìf”Ìo Ì[Ìg”Ìp Ì[Ìh”Ì{ Ì[Ìs”Ì| Ì[Ìt”Ì Ì[Ìw–” Ì\” Ì\” Ì\” Ì\” Ì\”, Ì\$‘” Ì]Ü ” ÌZ” ÌZ
+” Ìw” Ìw” Ìw” Ìw” Ìw”0 Ìw&”5 Ìw+”ÌH Ìw>”ÌI Ìw?”ÌV ÌwÌL”ÌW ÌwÌM”ÌX ÌwÌN”ÌÊ Ìx"”ÌË Ìx#”ÌÌ Ìx$”ÌÚ Ìx2”ÌÛ Ìx3”Ìå Ìx=” ÌZ” ÌZ
+” Ìy” Ìy” Ìy” Ìy”  Ìy”1 Ìy'”6 Ìy,”ÌI Ìy?”ÌJ ÌyÌ@”ÌW ÌyÌM”ÌX ÌyÌN”ÌY ÌyÌO—” Ìz” Ìz” Ìz”+ Ìz#”, Ìz$”- Ìz%”Ì ÌzÌBœ” ÌZ” ÌZ
+” Ì{” Ì{” Ì{” Ì{” Ì{”0 Ì{&”5 Ì{+”ÌH Ì{>”ÌI Ì{?”ÌV Ì{ÌL–” ÌZ” ÌZ
+” Ì|” Ì|” Ì|”! Ì|™” ÌZ” ÌZ
+” Ì}” Ì}” Ì}” Ì}”  Ì}”" Ì} ”$ Ì}"—” Ì~” Ì~” Ì~”% Ì~”( Ì~ ”- Ì~%”. Ì~&˜” Ì” Ì” Ì” Ì”+ Ì#”, Ì$”: Ì2”< Ì4–” Ì€
+” Ì€” Ì€”& Ì€”( Ì€”) Ì€‘” Ì	˜” Ì” Ì” Ì”# Ì”0 Ì*”1 Ì+”? Ì9”ÌA Ì;–” Ì‚
+” Ì‚” Ì‚”' Ì‚”) Ì‚”* Ì‚ ‘” Ìƒ	’” Ì„” Ì„“”4 Ì_
+”8 Ì_”? Ì_”  Ì`”+ Ì`”- Ì`”. Ì`”2 Ì`)”4 Ì`1”6 Ì`3”7 Ì`4”; Ì`8”< Ì`9”ÌL Ì`ÌI”ÌM Ì`ÌJ”ÌQ Ì`ÌN”ÌR Ì`ÌO‘” Ìa”$ Ì`”/ Ì`”1 Ì`”2 Ì`”6 Ì`)”8 Ì`1”: Ì`3”; Ì`4”? Ì`8”Ì@ Ì`9”ÌP Ì`ÌI”ÌQ Ì`ÌJ”ÌU Ì`ÌN”ÌV Ì`ÌO’” Ìc	” Ìc›” Ìc” Ìc” Ìc”) Ìc%”5 Ìc&”? Ìc0”Ì@ Ìc1”ÌM Ìc>”ÌN Ìc?”ÌX ÌcÌI”ÌY ÌcÌJ’”4 Ìf
+”> Ìf’” Ìh	” Ìh›” Ìh” Ìh” Ìh”) Ìh%”5 Ìh&”? Ìh0”Ì@ Ìh1”ÌM Ìh>”ÌN Ìh?”Ì_ ÌhÌP”Ì` ÌhÌQ“”4 Ìk
+”< Ìk”ÌC Ìk“”  Ìl”( Ìl”ÌA Ìl+š”  Ìm”, Ìm”. Ìm”1 Ìm#”3 Ìm%”4 Ìm&”8 Ìm*”9 Ìm+”ÌF Ìm8”ÌH Ìm:‘” Ìn’”$ Ìl”, Ìlš”$ Ìm”0 Ìm”2 Ìm”5 Ìm#”7 Ìm%”8 Ìm&”< Ìm*”= Ìm+”ÌJ Ìm8”ÌL Ìm:’” Ìp	” Ìp›” Ìp” Ìp” Ìp”) Ìp%”5 Ìp&”? Ìp0”Ì@ Ìp1”ÌM Ìp>”ÌN Ìp?”Ì] ÌpÌN”Ì^ ÌpÌO—”4 Ìs
+”< Ìs”ÌC Ìs”ÌE Ìs”ÌO Ìs”Ìb Ìs,”Ìd Ìs.’”$ Ìs”. Ìs’” Ìu	” Ìu›” Ìu” Ìu” Ìu”) Ìu%”5 Ìu&”? Ìu0”Ì@ Ìu1”ÌM Ìu>”ÌN Ìu?”Ì\ ÌuÌM”Ì] ÌuÌN’” ÌZ” ÌZ
+’” ÌY” ÌY
+‘” Ì‡”” Ì‰” Ì‰” Ì‰” Ì‰3š” ÌŠ” ÌŠ
+” ÌŠ” ÌŠ”! ÌŠ”# ÌŠ”0 ÌŠ!”1 ÌŠ"”= ÌŠ.”? ÌŠ0˜” ÌŠ” ÌŠ
+” Ì–” Ì–
+” Ì–”' Ì–”( Ì–”2 Ì–$˜” ÌŠ” ÌŠ
+” Ì—” Ì—” Ì—”( Ì—”) Ì—”4 Ì—&˜” ÌŠ” ÌŠ
+” Ì˜” Ì˜” Ì˜”- Ì˜”. Ì˜ ”4 Ì˜&˜” ÌŠ” ÌŠ
+” Ì™”! Ì™”" Ì™”+ Ì™”, Ì™”2 Ì™$Ü ” Ì‹” Ì‹” Ì‹” Ì‹” Ì‹”. Ì‹!”3 Ì‹&”9 Ì‹,”: Ì‹-”? Ì‹2”Ì@ Ì‹3”ÌA Ì‹4”ÌB Ì‹5”ÌH Ì‹;”ÌI Ì‹<”ÌR Ì‹ÌE”ÌS Ì‹ÌF”ÌT Ì‹ÌG”ÌU Ì‹ÌH”Ì[ Ì‹ÌN”Ì\ Ì‹ÌO”Ì_ Ì‹ÌR˜” Ì‹” Ì‹” ÌŒ	” ÌŒ” ÌŒ”$ ÌŒ”% ÌŒ”, ÌŒ#”” Ì‹” Ì‹” Ì	” Ì”” Ì‹” Ì‹” Ì	” Ì–” Ì” Ì
+” Ì” Ì” Ì”$ ÌÜ ” Ì” Ì
+” Ì	” Ì” Ì” Ì”  Ì”0 Ì(”5 Ì-”; Ì3”< Ì4”ÌA Ì9”ÌB Ì:”ÌC Ì;”Ìµ ÌÌX”Ì¶ ÌÌY”Ì· ÌÌZ”Ì¼ ÌÌ_”Ì½ ÌÌ`”ÌÂ ÌÌeÜ ” Ì” Ì
+” Ì‘	” Ì‘” Ì‘” Ì‘” Ì‘”. Ì‘&”3 Ì‘+”9 Ì‘1”: Ì‘2”? Ì‘7”Ì@ Ì‘8”ÌA Ì‘9”ÌB Ì‘:”ÌP Ì‘ÌH”ÌQ Ì‘ÌI”Ì] Ì‘ÌU”Ì^ Ì‘ÌV”Ì_ Ì‘ÌW”Ì` Ì‘ÌX”Ìn Ì‘Ìf”Ìo Ì‘Ìg”Ì| Ì‘Ìt˜” Ì” Ì
+” Ì’	” Ì’” Ì’”* Ì’"”+ Ì’#”; Ì’3˜” Ì” Ì
+” Ì“	” Ì“” Ì“”$ Ì“”% Ì“”+ Ì“#”” Ì” Ì
+” Ì”	” Ì”’” Ì” Ì
+’” ÌŠ” ÌŠ
+‘” ÌšÔrF–§version¤file§sources®sourcesContent¥names¨mappingsÀ‘À‘ÀÜ3‘”    ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”  	 ‘”  
+ ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”    ‘”  ! ‘”  " ‘”  # ‘”  $ ‘”  % ‘”  & ‘”  ' ‘”  ( ‘”  ) ‘”  * ‘”  + ‘”  , ‘”  - ‘”  . ‘”  / ‘”  0 ‘”  1 ‘”  2 ‘”  3 ‘”  4 ‘”  5 ‘”  6 ‘”  7 ‘”  8 ‘”  9 ‘”  : ‘”  ; ‘”  < ‘”  = ‘”  > ‘”  ? ‘”  Ì@ ‘”  ÌA ‘”  ÌB ‘”  ÌC ‘”  ÌD ‘”  ÌE ‘”  ÌF ‘”  ÌG ‘”  ÌH ‘”  ÌI ‘”  ÌJ ‘”  ÌK ‘”  ÌL ‘”  ÌM ‘”  ÌN ‘”  ÌO ‘”  ÌP ‘”  ÌQ ‘”  ÌR ‘”  ÌS ‘”  ÌT ‘”  ÌU ‘”  ÌV ‘”  ÌW ‘”  ÌX ‘”  ÌY ‘”  ÌZ ‘”  Ì[ ‘”  Ì\ ‘”  Ì] ‘”  Ì^ ‘”  Ì_ ‘”  Ì` ‘”  Ìa ‘”  Ìb ‘”  Ìc ‘”  Ìd ‘”  Ìe ‘”  Ìf ‘”  Ìg ‘”  Ìh ‘”  Ìi ‘”  Ìj ‘”  Ìk ‘”  Ìl ‘”  Ìm ‘”  Ìn ‘”  Ìo ‘”  Ìp ‘”  Ìq ‘”  Ìr ‘”  Ìs ‘”  Ìt ‘”  Ìu ‘”  Ìv ‘”  Ìw ‘”  Ìx ‘”  Ìy ‘”  Ìz ‘”  Ì{ ‘”  Ì| ‘”  Ì} ‘”  Ì~ ‘”  Ì ‘”  Ì€ ‘”  Ì ‘”  Ì‚ ‘”  Ìƒ ‘”  Ì„ ‘”  Ì… ‘”  Ì† ‘”  Ì‡ ‘”  Ìˆ ‘”  Ì‰ ‘”  ÌŠ ‘”  Ì‹ ‘”  ÌŒ ‘”  Ì ‘”  Ì ‘”  Ì ‘”  Ì ‘”  Ì‘ ‘”  Ì’ ‘”  Ì“ ‘”  Ì” ‘”  Ì• ‘”  Ì– ‘”  Ì— ‘”  Ì˜ ‘”  Ì™ ‘”  Ìš ‘”  Ì› ‘”  Ìœ ‘”  Ì ‘”  Ì ‘”  ÌŸ ‘”  Ì  ‘”  Ì¡ ‘”  Ì¢ ‘”  Ì£ ‘”  Ì¤ ‘”  Ì¥ ‘”  Ì¦ ‘”  Ì§ ‘”  Ì¨ ‘”  Ì© ‘”  Ìª ‘”  Ì« ‘”  Ì¬ ‘”  Ì­ ‘”  Ì® ‘”  Ì¯ ‘”  Ì° ‘”  Ì± ‘”  Ì² ‘”  Ì³ ‘”  Ì´ ‘”  Ìµ ‘”  Ì¶ ‘”  Ì· ‘”  Ì¸ ‘”  Ì¹ ‘”  Ìº ‘”  Ì» ‘”  Ì¼ ‘”  Ì½ ‘”  Ì¾ ‘”  Ì¿ ‘”  ÌÀ ‘”  ÌÁ ‘”  ÌÂ ‘”  ÌÃ ‘”  ÌÄ ‘”  ÌÅ ‘”  ÌÆ ‘”  ÌÇ ‘”  ÌÈ ‘”  ÌÉ ‘”  ÌÊ ‘”  ÌË ‘”  ÌÌ ‘”  ÌÍ ‘”  ÌÎ ‘”  ÌÏ ‘”  ÌĞ ‘”  ÌÑ ‘”  ÌÒ ‘”  ÌÓ ‘”  ÌÔ ‘”  ÌÕ ‘”  ÌÖ ‘”  Ì× ‘”  ÌØ ‘”  ÌÙ ‘”  ÌÚ ‘”  ÌÛ ‘”  ÌÜ ‘”  Ìİ ‘”  ÌŞ ‘”  Ìß ‘”  Ìà ‘”  Ìá ‘”  Ìâ ‘”  Ìã ‘”  Ìä ‘”  Ìå ‘”  Ìæ ‘”  Ìç ‘”  Ìè ‘”  Ìé ‘”  Ìê ‘”  Ìë ‘”  Ìì ‘”  Ìí ‘”  Ìî ‘”  Ìï ‘”  Ìğ ‘”  Ìñ ‘”  Ìò ‘”  Ìó ‘”  Ìô ‘”  Ìõ ‘”  Ìö ‘”  Ì÷ ‘”  Ìø ‘”  Ìù ‘”  Ìú ‘”  Ìû ‘”  Ìü ‘”  Ìı ‘”  Ìş ‘”  Ìÿ ‘”  Í  ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í	 ‘”  Í
+ ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í  ‘”  Í! ‘”  Í" ‘”  Í# ‘”  Í$ ‘”  Í% ‘”  Í& ‘”  Í' ‘”  Í( ‘”  Í) ‘”  Í* ‘”  Í+ ‘”  Í, ‘”  Í- ‘”  Í. ‘”  Í/ ‘”  Í0 ‘”  Í1 ‘”  Í2 ÂÔ  ÔrG”²dynamicImportCache¹exportAllDeclarationCache»exportNamedDeclarationCache«importCache˜ÔrH•¤type¥start£endªspecifiers¦source±ImportDeclarationÍéÍ‘ÔrI”¤type¥start£end¥local¶ImportDefaultSpecifierÍğÍöÔrJ”¤type¥start£end¤nameªIdentifierÍğÍö¦routerÔrK•¤type¥start£end¥value£raw§LiteralÍüÍ
+¬@ohos.router®'@ohos.router'H±ImportDeclarationÍÍ€•ÔrL•¤type¥start£end¨imported¥local¯ImportSpecifierÍÍ&JªIdentifierÍÍ&°LocalDataManagerJªIdentifierÍÍ&°LocalDataManagerL¯ImportSpecifierÍ(Í.JªIdentifierÍ(Í.¦LoggerJªIdentifierÍ(Í.¦LoggerL¯ImportSpecifierÍ0ÍDJªIdentifierÍ0ÍD´OrderOperationStatusJªIdentifierÍ0ÍD´OrderOperationStatusL¯ImportSpecifierÍFÍTJªIdentifierÍFÍT®StyleConstantsJªIdentifierÍFÍT®StyleConstantsL¯ImportSpecifierÍVÍiJªIdentifierÍVÍi³BreakpointConstantsJªIdentifierÍVÍi³BreakpointConstantsK§LiteralÍqÍ¬@ohos/common®'@ohos/common'H±ImportDeclarationÍ‚Í¤‘L¯ImportSpecifierÍ‹ÍJªIdentifierÍ‹Í¤HomeJªIdentifierÍ‹Í¤HomeK§LiteralÍ—Í£ª@ohos/home¬'@ohos/home'H±ImportDeclarationÍ¦ÍÔ‘L¯ImportSpecifierÍ¯Í¹JªIdentifierÍ¯Í¹ªNewProductJªIdentifierÍ¯Í¹ªNewProductK§LiteralÍÁÍÓ°@ohos/newproduct²'@ohos/newproduct'H±ImportDeclarationÍÖÍ ‘L¯ImportSpecifierÍßÍçJªIdentifierÍßÍç¨ShopCartJªIdentifierÍßÍç¨ShopCartK§LiteralÍïÍÿ®@ohos/shopcart°'@ohos/shopcart'H±ImportDeclarationÍÍ,‘L¯ImportSpecifierÍÍJªIdentifierÍÍ¨PersonalJªIdentifierÍÍ¨PersonalK§LiteralÍÍ+®@ohos/personal°'@ohos/personal'H±ImportDeclarationÍ.Íe‘L¯ImportSpecifierÍ7ÍAJªIdentifierÍ7ÍAªbuttonInfoJªIdentifierÍ7ÍAªbuttonInfoK§LiteralÍIÍd¹../viewmodel/MainPageData»'../viewmodel/MainPageData'H±ImportDeclarationÍgÍ¢‘L¯ImportSpecifierÍpÍ}JªIdentifierÍpÍ}­PageConstantsJªIdentifierÍpÍ}­PageConstantsK§LiteralÍ…Í¡º../constants/PageConstants¼'../constants/PageConstants'

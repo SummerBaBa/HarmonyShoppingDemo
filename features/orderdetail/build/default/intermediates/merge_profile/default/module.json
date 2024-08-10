@@ -1,0 +1,24 @@
+{
+	"app": {
+		"bundleName": "com.example.multishopping",
+		"debug": true,
+		"versionCode": 1000000,
+		"versionName": "1.0.0",
+		"minAPIVersion": 40000010,
+		"targetAPIVersion": 50000012,
+		"apiReleaseType": "Beta3",
+		"compileSdkVersion": "5.0.0.36",
+		"compileSdkType": "HarmonyOS",
+		"appEnvironments": [],
+		"bundleType": "app"
+	},
+	"module": {
+		"name": "orderdetail",
+		"type": "har",
+		"deviceTypes": [
+			"default",
+			"tablet"
+		],
+		"installationFree": false
+	}
+}

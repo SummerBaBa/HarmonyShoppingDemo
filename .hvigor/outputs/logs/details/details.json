@@ -1,0 +1,242 @@
+{
+  "HVIGOR_OHOS_PLUGIN": {
+    "MODULE_CONFIG": [
+      {
+        "MODULE_NAME": "phone",
+        "API_TYPE": "stageMode",
+        "TARGETS": [
+          {
+            "name": "default",
+            "runtimeOS": "HarmonyOS"
+          }
+        ],
+        "DEVICE_TYPES": [
+          "phone",
+          "tablet"
+        ],
+        "AOT_COMPILE_MODE": "type",
+        "INCREMENTAL_TASKS": {
+          "COMPILE_ARKTS": true
+        }
+      },
+      {
+        "MODULE_NAME": "common",
+        "API_TYPE": "stageMode",
+        "TARGETS": [
+          {
+            "name": "default",
+            "runtimeOS": "HarmonyOS"
+          }
+        ],
+        "DEVICE_TYPES": [
+          "default",
+          "tablet"
+        ],
+        "AOT_COMPILE_MODE": "type"
+      },
+      {
+        "MODULE_NAME": "home",
+        "API_TYPE": "stageMode",
+        "TARGETS": [
+          {
+            "name": "default",
+            "runtimeOS": "HarmonyOS"
+          }
+        ],
+        "DEVICE_TYPES": [
+          "default",
+          "tablet"
+        ],
+        "AOT_COMPILE_MODE": "type"
+      },
+      {
+        "MODULE_NAME": "newproduct",
+        "API_TYPE": "stageMode",
+        "TARGETS": [
+          {
+            "name": "default",
+            "runtimeOS": "HarmonyOS"
+          }
+        ],
+        "DEVICE_TYPES": [
+          "default",
+          "tablet"
+        ],
+        "AOT_COMPILE_MODE": "type"
+      },
+      {
+        "MODULE_NAME": "shopcart",
+        "API_TYPE": "stageMode",
+        "TARGETS": [
+          {
+            "name": "default",
+            "runtimeOS": "HarmonyOS"
+          }
+        ],
+        "DEVICE_TYPES": [
+          "default",
+          "tablet"
+        ],
+        "AOT_COMPILE_MODE": "type"
+      },
+      {
+        "MODULE_NAME": "personal",
+        "API_TYPE": "stageMode",
+        "TARGETS": [
+          {
+            "name": "default",
+            "runtimeOS": "HarmonyOS"
+          }
+        ],
+        "DEVICE_TYPES": [
+          "default",
+          "tablet"
+        ],
+        "AOT_COMPILE_MODE": "type"
+      },
+      {
+        "MODULE_NAME": "commoditydetail",
+        "API_TYPE": "stageMode",
+        "TARGETS": [
+          {
+            "name": "default",
+            "runtimeOS": "HarmonyOS"
+          }
+        ],
+        "DEVICE_TYPES": [
+          "default",
+          "tablet"
+        ],
+        "AOT_COMPILE_MODE": "type"
+      },
+      {
+        "MODULE_NAME": "orderdetail",
+        "API_TYPE": "stageMode",
+        "TARGETS": [
+          {
+            "name": "default",
+            "runtimeOS": "HarmonyOS"
+          }
+        ],
+        "DEVICE_TYPES": [
+          "default",
+          "tablet"
+        ],
+        "AOT_COMPILE_MODE": "type"
+      }
+    ],
+    "PROJECT_CONFIG": {
+      "PRODUCTS": [
+        {
+          "NAME": "default",
+          "COMPATIBLE_SDK_VERSION": "4.0.0(10)",
+          "RUNTIMEOS": "HarmonyOS"
+        }
+      ],
+      "MODULES": [
+        {
+          "TARGETS": [
+            {
+              "NAME": "default"
+            }
+          ]
+        },
+        {
+          "TARGETS": []
+        },
+        {
+          "TARGETS": []
+        },
+        {
+          "TARGETS": []
+        },
+        {
+          "TARGETS": []
+        },
+        {
+          "TARGETS": []
+        },
+        {
+          "TARGETS": []
+        },
+        {
+          "TARGETS": []
+        }
+      ],
+      "BUILD_MODE": "debug"
+    }
+  },
+  "totalTime": 3202206875,
+  "moduleNum": 1,
+  "taskTime": {
+    "compileArkTS": 2184226750,
+    "buildArkTS": 0,
+    "compileJS": 0,
+    "buildJS": 551667,
+    "compileResource": 0,
+    "packageHap": 262496833,
+    "signHap": 590125
+  },
+  "isIncremental": true,
+  "hasIncremental": true,
+  "isParallel": true,
+  "IS_DAEMON": true,
+  "LOG_LEVEL": "INFO",
+  "IS_HVIGORFILE_TYPE_CHECK": false,
+  "TASK_TIME": {
+    "phone": {
+      "PreBuild": 58343709,
+      "PreCheckSyscap": 160750,
+      "GeneratePkgContextInfo": 491542,
+      "ProcessIntegratedHsp": 345750,
+      "SyscapTransform": 6074292,
+      "ProcessRouterMap": 1864042,
+      "GenerateLoaderJson": 5073250,
+      "ConfigureCmake": 71125,
+      "BuildNativeWithCmake": 56375,
+      "BuildJS": 551667,
+      "BuildNativeWithNinja": 379417,
+      "CompileArkTS": 2184226750,
+      "GeneratePkgModuleJson": 1077625,
+      "PackageHap": 262496833,
+      "SignHap": 590125,
+      "assembleHap": 77000
+    },
+    "common": {
+      "ConfigureCmake": 83042,
+      "BuildNativeWithCmake": 81750,
+      "BuildNativeWithNinja": 693583
+    },
+    "home": {
+      "ConfigureCmake": 133833,
+      "BuildNativeWithCmake": 70167,
+      "BuildNativeWithNinja": 107458
+    },
+    "newproduct": {
+      "ConfigureCmake": 64792,
+      "BuildNativeWithCmake": 56417,
+      "BuildNativeWithNinja": 108875
+    },
+    "shopcart": {
+      "ConfigureCmake": 58458,
+      "BuildNativeWithCmake": 76583,
+      "BuildNativeWithNinja": 101625
+    },
+    "personal": {
+      "ConfigureCmake": 61667,
+      "BuildNativeWithCmake": 51708,
+      "BuildNativeWithNinja": 288000
+    },
+    "commoditydetail": {
+      "ConfigureCmake": 62334,
+      "BuildNativeWithCmake": 107417,
+      "BuildNativeWithNinja": 111250
+    },
+    "orderdetail": {
+      "ConfigureCmake": 62625,
+      "BuildNativeWithCmake": 54334,
+      "BuildNativeWithNinja": 104791
+    }
+  },
+  "BUILD_ID": "202408091700396330"
+}
